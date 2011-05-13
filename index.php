@@ -7,6 +7,9 @@
 <body>
 
 <div id="container">
+<?php
+session_start();
+?>
 
 <?php
 include 'header.php';

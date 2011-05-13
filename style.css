@@ -147,6 +147,7 @@ div#nav ul
 {
 	line-height: 2.2em;
 	padding-bottom: 0px;
+	display: inline;
 }
 
 div#nav ul li
@@ -177,6 +178,23 @@ div#nav ul li a
 div#nav ul li a:hover
 {
 	background-color: #888888;
+}
+
+div#nav a#login
+{
+	color: #f4f2ef;
+	font-weight: bold;
+	text-decoration: none;
+	
+	float: right;
+	margin-right: 4px;
+	padding: 8px;
+}
+
+div#nav a#login:hover
+{
+	color: #ffffff;
+	/*text-decoration: underline;*/
 }
 
 div#main

@@ -5,6 +5,9 @@
 	<link rel="stylesheet" type="text/css" href="/osugds/style.css" />
 </head>
 <body>
+<?php
+session_start();
+?>
 
 <div id="container">
 
