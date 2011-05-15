@@ -18,7 +18,9 @@ if (isset($_SESSION['engr']))
 {
 	if (isset($_SESSION['goto']))
 	{
-		header('Location: ' . $_SESSION['goto']);
+		$goto = $_SESSION['goto'];
+		unset($_SESSION['goto']);
+		header('Location: ' . $goto);
 	}
 	else
 	{
