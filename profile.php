@@ -1,3 +1,13 @@
+<?php
+	session_start();
+	
+	if (!isset($_SESSION['engr']))
+	{
+		$_SESSION['goto'] = $currentPage;
+		header('Location: /osugds/login.php');
+	}
+?>
+<!DOCTYPE HTML>
 <html>
 <head>
 	<title>OSU Game Design Studios</title>
@@ -23,11 +33,35 @@ include 'nav.php';
 	</div>
 	
 	<h1>Edit Your Profile</h1>
-	<?php if ($_REQUEST['updated'] == 1) { print '<p>Profile updated successfully.</p>'; } ?>
+	
+	<?php
+		if (!isset($_SESSION['valid']) or !$_SESSION['valid'])
+		{
+			print '<p>You must fill out the required information before your account is created.</p>';
+		}
+		elseif ($_REQUEST['updated'] == 1)
+		{
+			print '<p>Profile updated successfully.</p>';
+		}
+	?>
+	
 	<form action="doUpdateProfile.php" method="post">
-		<!-- TODO: Load existing name from database -->
 		<label for="name">Full Name</label>
-		<input type="text" name="name" />
+		
+		<?php
+			require_once 'mysql.php';
+			$con = dbConnect();
+			
+			$engr = mysql_real_escape_string($_SESSION['engr']);
+			$query = "SELECT Name FROM Members WHERE ENGR='" . $engr . "';";
+			$result = mysql_query($query);
+			mysql_close($con);
+			
+			$row = mysql_fetch_array($result);
+			$name = $row['Name'];
+			
+			print '<input type="text" name="name" value="' . $name . '" />';
+		?>
 		
 		<input type="submit" value="Save Changes"/>
 	</form>

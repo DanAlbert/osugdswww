@@ -1,11 +1,7 @@
 <?php
 	session_start();
-	
-	if (!isset($_SESSION['engr']))
-	{
-		$_SESSION['goto'] = '/osugds/createProject.php';
-		header('Location: /osugds/login.php');
-	}
+	require_once 'accounts.php';
+	requireLogin($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE HTML>
 <html>
