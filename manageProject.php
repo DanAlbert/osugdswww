@@ -28,25 +28,7 @@ include 'nav.php';
 		</p>
 	</div>
 	
-	<h1>Create a Project</h1>
-	<form action="doCreateProject.php" method="POST">
-		<label for="title">Title *</label>
-		<input id="title" type="text" name="title" />
-		
-		<label for="description">Description *</label>
-		<textarea id="description" name="description" cols="50" rows="5"></textarea>
-		
-		<label for="projectURL">Project URL</label>
-		<input id="projectURL" type="text" name="projectURL" />
-		
-		<label for="repoURL">Repository URL</label>
-		<input id="repoURL" type="text" name="repoURL" />
-		
-		<label for="imageURL">Image URL</label>
-		<input id="imageURL" type="text" name="imageURL" />
-		
-		<input type="submit" />
-	</form>
+	<h1>Manage <?php require_once 'projects.php'; echo getProjectTitle($_REQUEST['id']); ?></h1>
 	
 	<div class="clear"></div>
 </div> <!-- main -->

@@ -39,7 +39,7 @@ include 'nav.php';
 		{
 			print '<p>You must fill out the required information before your account is created.</p>';
 		}
-		elseif ($_REQUEST['updated'] == 1)
+		elseif (isset($_REQUEST['updated']) && ($_REQUEST['updated'] == 1))
 		{
 			print '<p>Profile updated successfully.</p>';
 		}

@@ -20,7 +20,7 @@ if (isset($_POST['engr']))
 		$result = mysql_query(mysql_real_escape_string($query));
 		mysql_close($con);
 		
-		if ((mysql_fetch_array($result)) and (isset($_SESSION['goto'])))
+		if ((mysql_num_rows($result) > 0) and (isset($_SESSION['goto'])))
 		{
 			$_SESSION['valid'] = true;
 			$goto = $_SESSION['goto'];

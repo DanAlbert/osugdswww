@@ -27,7 +27,7 @@ include 'nav.php';
 	</div>
 	
 	<h1>Log In</h1>
-	<?php if ($_REQUEST['failed'] == 1) { print '<p>Incorrect username or password. Please try again.</p>'; } ?>
+	<?php if (isset($_REQUEST['failed']) && ($_REQUEST['failed'] == 1)) { print '<p>Incorrect username or password. Please try again.</p>'; } ?>
 	<form action="doLogin.php" method="post">
 		<label for="engr">Engineering Username</label>
 		<input type="text" name="engr" />
