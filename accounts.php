@@ -2,6 +2,26 @@
 
 require_once 'mysql.php';
 
+function isValidLogIn()
+{
+	if (!isset($_SESSION['engr']))
+	{
+		return false;
+	}
+	else
+	{
+		if (!isset($_SESSION['valid']))
+		{
+			if (!isset($_SESSION['valid']) or !$_SESSION['valid'])
+			{
+				return false;
+			}
+		}
+	}
+	
+	return true;
+}
+
 function requireLogin($currentPage)
 {
 	if (!isset($_SESSION['engr']))
@@ -15,6 +35,7 @@ function requireLogin($currentPage)
 		{
 			if (!isset($_SESSION['valid']) or !$_SESSION['valid'])
 			{
+				$_SESSION['goto'] = $currentPage;
 				header('Location: /osugds/profile.php');
 			}
 		}
@@ -40,6 +61,27 @@ function getMemberID($engr)
 	else
 	{
 		return $row['ID'];
+	}
+}
+
+function memberIsManager($id)
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		return null;
+	}
+	
+	$query = "SELECT * FROM ProjectManagers WHERE MemberID='" . $id . "';";
+	$result = mysql_query($query, $con);
+	
+	if (mysql_num_rows($result) > 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 

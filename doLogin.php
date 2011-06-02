@@ -6,7 +6,8 @@ session_start();
 
 if (isset($_POST['engr']))
 {
-	if (($_POST['engr'] == 'albertd') && ($_POST['password'] == 'foobar'))
+	if ((($_POST['engr'] == 'albertd') AND ($_POST['password'] == 'foobar')) OR
+		(($_POST['engr'] == 'ta') && ($_POST['password'] == 'passwd')))
 	{
 		$_SESSION['engr'] = $_POST['engr'];
 		
@@ -16,8 +17,8 @@ if (isset($_POST['engr']))
 			die('Could not connect to database server.');
 		}
 		
-		$query = "SELECT Name FROM Memebers WHERE ENGR='" . $_SESSION['engr'] . "';";
-		$result = mysql_query(mysql_real_escape_string($query));
+		$query = "SELECT Name FROM Members WHERE ENGR='" . mysql_real_escape_string($_SESSION['engr']) . "';";
+		$result = mysql_query($query, $con);
 		mysql_close($con);
 		
 		if ((mysql_num_rows($result) > 0) and (isset($_SESSION['goto'])))
