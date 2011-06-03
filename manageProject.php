@@ -9,6 +9,47 @@
 	<title>OSU Game Design Studios</title>
 	<meta name="author" content="Dan Albert" />
 	<link rel="stylesheet" type="text/css" href="/osugds/style.css" />
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" >
+		function addSelectedMember(projectID)
+		{
+			$.ajax({type: "POST",
+				url: "/osugds/doAddMemberToProject.php",
+				data: { memberID: $("select option:selected").val(), projectID: projectID },
+				dataType: "text",
+				success: function(text)
+				{
+					if (text == 'success')
+					{
+						location.reload(true);
+					}
+					else
+					{
+						alert(text);
+					}
+				}});
+		}
+		
+		function removeMember(memberID, projectID)
+		{
+			$.ajax({type: "POST",
+				url: "/osugds/doRemoveMemberFromProject.php",
+				data: { memberID: memberID, projectID: projectID },
+				dataType: "text",
+				success: function(text)
+				{
+					if (text == 'success')
+					{
+						location.reload(true);
+					}
+					else
+					{
+						alert(text);
+					}
+				}});
+		}
+	</script>
 </head>
 <body>
 
@@ -45,7 +86,18 @@ include 'nav.php';
 		<label for="imageURL">Image URL</label>
 		<input id="imageURL" type="text" name="imageURL" value="<?php require_once 'projects.php'; echo getProjectImageURL($_REQUEST['id']); ?>" />
 		
-		<table>
+		<input type="submit" value="Save Changes" />
+		
+	</form>
+	
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Member Name</th>
+				<th>Modify</th>
+			</tr>
+		</thead>
+		<tbody>
 			<?php
 				require_once 'accounts.php';
 				require_once 'projects.php';
@@ -53,13 +105,19 @@ include 'nav.php';
 				$members = getProjectMembers($_REQUEST['id']);
 				foreach ($members as $member)
 				{
-					print '<tr><td>' . $member['name'] . '</td></tr>';//<td><input type="checkbox" name="deleteMember[\'' . $member['id'] . '\']" value="1" /></td></tr>'
+					print '<tr><td>' . $member['name'] . '</td><td align="center"><button onclick="removeMember(' . $member['id'] . ', ' . $_REQUEST['id'] . ');" >Remove Member</button></td></tr>';
 				}
+				
+				print '<tr><td><select name="addMember">';
+				$unmembers = getProjectMembersComplement($_REQUEST['id']);
+				foreach ($unmembers as $unmember)
+				{
+					print '<option value="' . $unmember['id'] . '">' . $unmember['name'] . '</option>';
+				}
+				print '</select></td><td><button onclick="addSelectedMember(' . $_REQUEST['id'] . ');" >Add Member</button></td></tr>';
 			?>
-		</table>
-		
-		<input type="submit" value="Save Changes" />
-	</form>
+		</tbody>
+	</table>
 	
 	<div class="clear"></div>
 </div> <!-- main -->

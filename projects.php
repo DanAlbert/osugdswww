@@ -142,7 +142,7 @@ function getProjectMembers($id)
 		return null;
 	}
 	
-	$query = "SELECT Members.ID, Members.Name FROM Members, ProjectMembers WHERE ProjectMembers.ProjectID='" . $id . "';";
+	$query = "SELECT Members.ID, Members.Name FROM Members, ProjectMembers WHERE ProjectMembers.ProjectID='" . $id . "' AND Members.ID=ProjectMembers.MemberID;";
 	$result = mysql_query($query, $con);
 	
 	$members = array();
@@ -151,9 +151,80 @@ function getProjectMembers($id)
 		$member = array();
 		$member['id'] = $row['ID'];
 		$member['name'] = $row['Name'];
+		$members[] = $member;
 	}
 	
 	return $members;
+}
+
+function getProjectMembersComplement($id)
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		return null;
+	}
+	
+	
+	$query = "SELECT Members.ID, Members.Name FROM Members WHERE Members.ID NOT IN (SELECT Members.ID FROM Members, ProjectMembers WHERE ProjectMembers.ProjectID='" . $id . "' AND Members.ID=ProjectMembers.MemberID)";
+	$result = mysql_query($query, $con);
+	
+	$members = array();
+	while ($row = mysql_fetch_array($result))
+	{
+		$member = array();
+		$member['id'] = $row['ID'];
+		$member['name'] = $row['Name'];
+		$members[] = $member;
+	}
+	
+	return $members;
+}
+
+function addMemberToProject($memberID, $projectID)
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		die('Could not connect to database server.');
+	}
+	
+	$query = "INSERT INTO ProjectMembers (MemberID, ProjectID) VALUES ('" . $memberID . "', '" . $projectID . "');";
+	mysql_query($query, $con);
+	
+	if (mysql_errno() != 0)
+	{
+		mysql_close($con);
+		return false;
+	}
+	else
+	{
+		mysql_close($con);
+		return true;
+	}
+}
+
+function removeMemberFromProject($memberID, $projectID)
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		die('Could not connect to database server.');
+	}
+	
+	$query = "DELETE FROM ProjectMembers WHERE MemberID='" . $memberID . "' AND ProjectID='" . $projectID . "';";
+	mysql_query($query, $con);
+	
+	if (mysql_errno() != 0)
+	{
+		mysql_close($con);
+		return false;
+	}
+	else
+	{
+		mysql_close($con);
+		return true;
+	}
 }
 
 ?>

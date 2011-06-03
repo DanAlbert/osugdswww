@@ -50,11 +50,20 @@ else
 		mysql_query($query, $con);
 		if (mysql_errno() != 0)
 		{
-			header('Location: createProject.php?error=2');
+			header('Location: createProject.php?error=3');
 		}
 		else
 		{
-			header('Location: manageProject.php?id=' .  $projectID);
+			$query = "INSERT INTO ProjectMembers (MemberID, ProjectID) VALUES ('" . $memberID . "', '" . $projectID . "');";
+			mysql_query($query, $con);
+			if (mysql_errno() != 0)
+			{
+				header('Location: createProject.php?error=4');
+			}
+			else
+			{
+				header('Location: manageProject.php?id=' .  $projectID);
+			}
 		}
 	}
 }
