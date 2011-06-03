@@ -100,9 +100,19 @@ form input
 	display: block;
 }
 
-form input+input
+form input+input, form input+select, form select+input
 {
 	margin: 8px 0px 0px 0px;
+}
+
+table
+{
+	margin-top: 6px;
+}
+
+table tr td
+{
+	padding: 2px;
 }
 
 div#container

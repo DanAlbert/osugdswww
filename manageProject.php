@@ -16,7 +16,7 @@
 		{
 			$.ajax({type: "POST",
 				url: "/osugds/doAddMemberToProject.php",
-				data: { memberID: $("select option:selected").val(), projectID: projectID },
+				data: { memberID: $("table tbody tr td select option:selected").val(), projectID: projectID },
 				dataType: "text",
 				success: function(text)
 				{
@@ -70,6 +70,7 @@ include 'nav.php';
 	</div>
 	
 	<h1>Manage <?php require_once 'projects.php'; echo getProjectTitle($_REQUEST['id']); ?></h1>
+	<h2>Project Details</h2>
 	<form action="doUpdateProject.php?id=<?php echo $_REQUEST['id']; ?>" method="POST">
 		<label for="title">Title *</label>
 		<input id="title" type="text" name="title" value="<?php require_once 'projects.php'; echo getProjectTitle($_REQUEST['id']); ?>" />
@@ -86,8 +87,34 @@ include 'nav.php';
 		<label for="imageURL">Image URL</label>
 		<input id="imageURL" type="text" name="imageURL" value="<?php require_once 'projects.php'; echo getProjectImageURL($_REQUEST['id']); ?>" />
 		
+		<input type="hidden" name="id" value="<?php echo $_REQUEST['id']; ?>" /> <!-- Vulnerable -->
+		
 		<input type="submit" value="Save Changes" />
 		
+	</form>
+	
+	<h2>Project Members</h2>
+	<form action="doSetProjectManager.php?id=<?php echo $_REQUEST['id']; ?>" method="POST">
+		<label for="memberID">Project Manager</label>
+		<select id="memberID" name="memberID">
+			<?php
+				$projectManager = getProjectManager($_REQUEST['id']);
+				print 'Manager: ' . $projectManager;
+				$members = getProjectMembers($_REQUEST['id']);
+				foreach ($members as $member)
+				{
+					print '<option value="' . $member['id'] . '"';
+					
+					if ($member['id'] == $projectManager)
+					{
+						print ' selected="selected"';
+					}
+					
+					print '>' . $member['name'] . '</option>';
+				}
+			?>
+		</select>
+		<input type="submit" value="Set Project Manager" />
 	</form>
 	
 	<table border="1">

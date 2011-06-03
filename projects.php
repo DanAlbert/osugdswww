@@ -134,6 +134,21 @@ function getProjectImageURL($id)
 	}
 }
 
+# Not tolerant of errors
+function getProjectManager($id)
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		return null;
+	}
+	
+	$query = "SELECT MemberID FROM ProjectManagers WHERE ProjectID='" . $id . "';";
+	$result = mysql_query($query, $con);
+	$row = mysql_fetch_array($result);
+	return $row['MemberID'];
+}
+
 function getProjectMembers($id)
 {
 	$con = dbConnect();
@@ -142,7 +157,7 @@ function getProjectMembers($id)
 		return null;
 	}
 	
-	$query = "SELECT Members.ID, Members.Name FROM Members, ProjectMembers WHERE ProjectMembers.ProjectID='" . $id . "' AND Members.ID=ProjectMembers.MemberID;";
+	$query = "SELECT Members.ID, Members.Name FROM Members, ProjectMembers WHERE ProjectMembers.ProjectID='" . $id . "' AND Members.ID=ProjectMembers.MemberID ORDER BY Members.Name ASC;";
 	$result = mysql_query($query, $con);
 	
 	$members = array();
@@ -166,7 +181,7 @@ function getProjectMembersComplement($id)
 	}
 	
 	
-	$query = "SELECT Members.ID, Members.Name FROM Members WHERE Members.ID NOT IN (SELECT Members.ID FROM Members, ProjectMembers WHERE ProjectMembers.ProjectID='" . $id . "' AND Members.ID=ProjectMembers.MemberID)";
+	$query = "SELECT Members.ID, Members.Name FROM Members WHERE Members.ID NOT IN (SELECT Members.ID FROM Members, ProjectMembers WHERE ProjectMembers.ProjectID='" . $id . "' AND Members.ID=ProjectMembers.MemberID) ORDER BY Members.Name ASC;";
 	$result = mysql_query($query, $con);
 	
 	$members = array();
@@ -179,6 +194,29 @@ function getProjectMembersComplement($id)
 	}
 	
 	return $members;
+}
+
+function setProjectManager($memberID, $projectID)
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		die('Could not connect to database server.');
+	}
+	
+	$query = "UPDATE ProjectManagers SET MemberID='" . $memberID . "', ProjectID='" . $projectID . "' WHERE ProjectID='" . $projectID . "';";
+	mysql_query($query, $con);
+	
+	if (mysql_errno() != 0)
+	{
+		mysql_close($con);
+		return false;
+	}
+	else
+	{
+		mysql_close($con);
+		return true;
+	}
 }
 
 function addMemberToProject($memberID, $projectID)
