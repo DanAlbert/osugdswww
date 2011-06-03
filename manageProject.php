@@ -1,7 +1,13 @@
 <?php
 	session_start();
 	require_once 'accounts.php';
+	require_once 'projects.php';
+	
 	requireLogin($_SERVER['PHP_SELF']);
+	if (getCurrentMemberID() != getProjectManager($_REQUEST['id']))
+	{
+		header('Location: /osugds/forbidden.php');
+	}
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -42,6 +48,10 @@
 					if (text == 'success')
 					{
 						location.reload(true);
+					}
+					else if (text == 'forbidden')
+					{
+						window.location = '/osugds/forbidden.php';
 					}
 					else
 					{

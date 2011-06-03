@@ -64,6 +64,18 @@ function getMemberID($engr)
 	}
 }
 
+function getCurrentMemberID()
+{
+	if (isset($_SESSION['engr']))
+	{
+		return getMemberID($_SESSION['engr']);
+	}
+	else
+	{
+		return null;
+	}
+}
+
 function memberIsManager($id)
 {
 	$con = dbConnect();

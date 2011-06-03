@@ -1,8 +1,14 @@
 <?php
 
+require_once 'accounts.php';
 require_once 'mysql.php';
 require_once 'projects.php';
 
+if (getCurrentMemberID() != getProjectManager($_POST['id']))
+{
+	header('Location: /osugds/forbidden.php');
+}
+	
 $con = dbConnect();
 
 $id = mysql_real_escape_string($_POST['id']);
