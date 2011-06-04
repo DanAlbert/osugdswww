@@ -34,6 +34,8 @@ include 'nav.php';
 		require_once 'mysql.php';
 		require_once 'projects.php';
 		
+		$currentID = getCurrentMemberID();
+		
 		$con = dbConnect();
 		if (!$con)
 		{
@@ -41,7 +43,7 @@ include 'nav.php';
 		}
 		else
 		{
-			$query = "SELECT Projects.ID, Projects.Title FROM Projects, ProjectManagers WHERE ProjectManagers.MemberID='" . getMemberID($_SESSION['engr']) . "' AND Projects.ID=ProjectManagers.ProjectID;";
+			$query = "SELECT Projects.ID, Projects.Title FROM Projects, ProjectManagers WHERE ProjectManagers.MemberID='" . $currentID . "' AND Projects.ID=ProjectManagers.ProjectID;";
 			$result = mysql_query($query, $con);
 			
 			while ($row = mysql_fetch_array($result))

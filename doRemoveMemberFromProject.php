@@ -5,14 +5,15 @@ require_once 'projects.php';
 
 session_start();
 
-if (getCurrentMemberID() != getProjectManager($_POST['projectID']))
+$memberID = $_POST['memberID'];
+$projectID = $_POST['projectID'];
+
+$id = getCurrentMemberID();
+if (($id != getProjectManager($_POST['projectID'])) AND ($id != $memberID))
 {
 	print 'forbidden';
 	return;
 }
-
-$memberID = $_POST['memberID'];
-$projectID = $_POST['projectID'];
 
 if (removeMemberFromProject($memberID, $projectID))
 {

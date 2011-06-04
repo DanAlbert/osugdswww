@@ -163,9 +163,39 @@ function getProjectMembers($id)
 	$members = array();
 	while ($row = mysql_fetch_array($result))
 	{
+		$project = array();
+		$project['id'] = $row['ID'];
+		$project['name'] = $row['Name'];
+		$projects[] = $project;
+	}
+	
+	return $project;
+}
+
+function getMemberProjects($id)
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		return null;
+	}
+	
+	$query = "SELECT Projects.ID, Projects.Title, ProjectMembers.Developer, ProjectMembers.Artist2D, ProjectMembers.Artist3D, ProjectMembers.SoundDesigner, ProjectMembers.GameDesigner, ProjectMembers.Writer " .
+					"FROM Projects, ProjectMembers WHERE ProjectMembers.MemberID='" . $id . "' AND Projects.ID=ProjectMembers.ProjectID ORDER BY Projects.Title ASC;";
+	$result = mysql_query($query, $con);
+	
+	$members = array();
+	while ($row = mysql_fetch_array($result))
+	{
 		$member = array();
-		$member['id'] = $row['ID'];
-		$member['name'] = $row['Name'];
+		$member['ID'] = $row['ID'];
+		$member['Title'] = $row['Title'];
+		$member['Developer'] = $row['Developer'];
+		$member['Artist2D'] = $row['Artist2D'];
+		$member['Artist3D'] = $row['Artist3D'];
+		$member['SoundDesigner'] = $row['SoundDesigner'];
+		$member['GameDesigner'] = $row['GameDesigner'];
+		$member['Writer'] = $row['Writer'];
 		$members[] = $member;
 	}
 	

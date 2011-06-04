@@ -190,7 +190,7 @@ div#nav ul li a:hover
 	background-color: #888888;
 }
 
-div#nav a#login
+div#nav a#login, div#nav a#profile
 {
 	color: #f4f2ef;
 	font-weight: bold;
@@ -201,9 +201,15 @@ div#nav a#login
 	padding: 8px;
 }
 
-div#nav a#login:hover
+div#nav a#profile
 {
-	color: #ffffff;
+	border-left: 1px solid #f4f2ef;
+	border-right: 1px solid #f4f2ef;
+}
+
+div#nav a#login:hover, div#nav a#profile:hover
+{
+	background-color: #888888;
 	/*text-decoration: underline;*/
 }
 
