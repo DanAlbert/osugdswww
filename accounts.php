@@ -76,6 +76,27 @@ function getCurrentMemberID()
 	}
 }
 
+function memberIsExec($id)
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		return null;
+	}
+	
+	$query = "SELECT * FROM Members WHERE Executive='1' AND ID='" . $id . "';";
+	$result = mysql_query($query, $con);
+	
+	if (mysql_num_rows($result) > 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 function memberIsManager($id)
 {
 	$con = dbConnect();
