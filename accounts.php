@@ -54,6 +54,8 @@ function getMemberID($engr)
 	$result = mysql_query($query, $con);
 	
 	$row = mysql_fetch_array($result);
+	mysql_close($con);
+	
 	if ($row === false)
 	{
 		return null;
@@ -89,10 +91,12 @@ function memberIsExec($id)
 	
 	if (mysql_num_rows($result) > 0)
 	{
+		mysql_close($con);
 		return true;
 	}
 	else
 	{
+		mysql_close($con);
 		return false;
 	}
 }
@@ -110,12 +114,48 @@ function memberIsManager($id)
 	
 	if (mysql_num_rows($result) > 0)
 	{
+		mysql_close($con);
 		return true;
 	}
 	else
 	{
+		mysql_close($con);
 		return false;
 	}
+}
+
+function promoteMember($id)
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		return null;
+	}
+	
+	$query = "UPDATE Members SET Executive='1' WHERE ID='" . $id . "';";
+	$result = mysql_query($query, $con);
+	
+	$errno = mysql_errno();
+	mysql_close($con);
+	
+	return $errno;
+}
+
+function demoteMember($id)
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		return null;
+	}
+	
+	$query = "UPDATE Members SET Executive='0' WHERE ID='" . $id . "';";
+	$result = mysql_query($query, $con);
+	
+	$errno = mysql_errno();
+	mysql_close($con);
+	
+	return $errno;
 }
 
 ?>

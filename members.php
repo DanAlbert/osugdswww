@@ -3,6 +3,55 @@
 	<title>OSU Game Design Studios</title>
 	<meta name="author" content="Dan Albert" />
 	<link rel="stylesheet" type="text/css" href="/osugds/style.css" />
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" >
+		function promoteMember(id)
+		{
+			$.ajax({type: "POST",
+				url: "/osugds/doPromoteMember.php",
+				data: { id: id },
+				dataType: "text",
+				success: function(text)
+				{
+					if (text == 0)
+					{
+						location.reload(true);
+					}
+					else if (text == 'forbidden')
+					{
+						window.location = '/osugds/forbidden.php';
+					}
+					else
+					{
+						alert(text);
+					}
+				}});
+		}
+		
+		function demoteMember(id)
+		{
+			$.ajax({type: "POST",
+				url: "/osugds/doDemoteMember.php",
+				data: { id: id },
+				dataType: "text",
+				success: function(text)
+				{
+					if (text == 0)
+					{
+						location.reload(true);
+					}
+					else if (text == 'forbidden')
+					{
+						window.location = '/osugds/forbidden.php';
+					}
+					else
+					{
+						alert(text);
+					}
+				}});
+		}
+	</script>
 </head>
 <body>
 <?php
@@ -37,21 +86,31 @@ include 'nav.php';
 					die('Could not connect to database server.');
 				}
 				
-				$query = "SELECT ID, Name FROM Members ORDER BY Name ASC;";
+				$query = "SELECT ID, Name, Executive FROM Members ORDER BY Name ASC;";
 				$result = mysql_query($query, $con);
+				
+				$memberID = getCurrentMemberID();
+				$exec = memberIsExec($memberID);
 				
 				while ($row = mysql_fetch_array($result))
 				{
 					print '<tr><td><a href="memberInfo.php?id=' . $row['ID'] . '">' . $row['Name'] . '</a></td>';
-					if (memberIsExec(getCurrentMemberID()))
+					if ($exec)
 					{
-						if (memberIsExec($row['ID']))
+						if ($row['ID'] == $memberID)
 						{
-							print '<td><button onclick="demoteMember(' . $row['ID'] . ')">Demote Member</button></td>';
+							print '<td></td>';
 						}
 						else
 						{
-							print '<td><button onclick="promoteMember(' . $row['ID'] . ')">Promote Member</button></td>';
+							if ($row['Executive'])
+							{
+								print '<td><button onclick="demoteMember(' . $row['ID'] . ')">Demote Member</button></td>';
+							}
+							else
+							{
+								print '<td><button onclick="promoteMember(' . $row['ID'] . ')">Promote Member</button></td>';
+							}
 						}
 					}
 					print '</tr>';
