@@ -105,6 +105,11 @@ form input+input, form input+select, form select+input
 	margin: 8px 0px 0px 0px;
 }
 
+form select+select
+{
+	margin: 0px 0px 0px 8px;
+}
+
 table
 {
 	margin-top: 6px;

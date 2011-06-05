@@ -6,7 +6,7 @@ require_once 'projects.php';
 
 session_start();
 
-requireLogin('createProject.php');
+requireLogin('/osugds/createProject.php');
 
 $con = dbConnect();
 if (!$con)

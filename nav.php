@@ -9,6 +9,7 @@
 		<?php require_once 'accounts.php'; if (isValidLogIn() AND memberIsManager(getCurrentMemberID())) { print '<li><a href="userProjects.php">Manage Projects</a></li>'; } ?>
 		<li><a href="/osugds/members.php">Members</a></li>
 		<li><a href="/osugds/resources.php">Resources</a></li>
+		<li><a href="/osugds/contribute.php">Contribute</a></li>
 		<li><a href="http://gamedev.stackexchange.com/">Get Help</a></li>
 		<li><a href="/osugds/about.php">About Us</a></li>
 	</ul>

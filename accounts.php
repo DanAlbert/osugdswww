@@ -158,4 +158,33 @@ function demoteMember($id)
 	return $errno;
 }
 
+function getAllMembers()
+{
+	$con = dbConnect();
+	if (!$con)
+	{
+		return null;
+	}
+	
+	$query = "SELECT ID, Name FROM Members ORDER BY Name ASC;";
+	$result = mysql_query($query, $con);
+	
+	$members = array();
+	while ($row = mysql_fetch_array($result))
+	{
+		$member = array();
+		$member['ID'] = $row['ID'];
+		$member['Name'] = $row['Name'];
+		
+		if ($member['ID'] != 0)
+		{
+			$members[] = $member;
+		}
+	}
+	
+	mysql_close($con);
+	
+	return $members;
+}
+
 ?>
