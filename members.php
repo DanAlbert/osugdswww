@@ -86,30 +86,29 @@ include 'nav.php';
 					die('Could not connect to database server.');
 				}
 				
-				$query = "SELECT ID, Name, Executive FROM Members ORDER BY Name ASC;";
-				$result = mysql_query($query, $con);
+				$members = getallMembers();
 				
 				$memberID = getCurrentMemberID();
 				$exec = memberIsExec($memberID);
 				
-				while ($row = mysql_fetch_array($result))
+				foreach ($members as $member)
 				{
-					print '<tr><td><a href="memberInfo.php?id=' . $row['ID'] . '">' . $row['Name'] . '</a></td>';
+					print '<tr><td><a href="memberInfo.php?id=' . $member['ID'] . '">' . $member['Name'] . '</a></td>';
 					if ($exec)
 					{
-						if ($row['ID'] == $memberID)
+						if ($member['ID'] == $memberID)
 						{
 							print '<td></td>';
 						}
 						else
 						{
-							if ($row['Executive'])
+							if ($member['Executive'])
 							{
-								print '<td><button onclick="demoteMember(' . $row['ID'] . ')">Demote Member</button></td>';
+								print '<td><button onclick="demoteMember(' . $member['ID'] . ')">Demote Member</button></td>';
 							}
 							else
 							{
-								print '<td><button onclick="promoteMember(' . $row['ID'] . ')">Promote Member</button></td>';
+								print '<td><button onclick="promoteMember(' . $member['ID'] . ')">Promote Member</button></td>';
 							}
 						}
 					}
