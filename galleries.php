@@ -17,13 +17,13 @@ include 'nav.php';
 ?>
 
 <div id="main">
-	<!--<div class="notice">
+	<div class="notice">
 		<h2>Under Construction</h2>
 		<p>
 			This web site is currently under construction. Please check back
 			later for updates.
 		</p>
-	</div>-->
+	</div>
 	
 	<?php
 		$projects = getProjects();
@@ -99,7 +99,7 @@ include 'nav.php';
 						$membersString .= ', ';
 					}
 					
-					$membersString .= $member;
+					$membersString .= $member['name'];
 					
 					$first = false;
 				}
@@ -136,6 +136,9 @@ include 'nav.php';
 		function getProjects()
 		{
 			require_once 'mysql.php';
+			require_once 'projects.php';
+			
+			$projects = array();
 			
 			$con = dbConnect();
 			if (!$con)
@@ -148,69 +151,11 @@ include 'nav.php';
 					'Description, ImageURL, RepoURL, ProjectURL FROM ' .
 					'Projects ORDER BY Title DESC;');
 				
-				$result = mysql_query($sql);
+				$result = mysql_query($sql, $con);
 				
 				while ($row = mysql_fetch_array($result))
 				{
-					$memberSql = mysql_real_escape_string('SELECT Name, ' .
-						'ProjectManager, Developer, Artist2D, Artist3D, ' .
-						'SoundDesigner, GameDesigner, Writer FROM ' .
-						'ProjectMembers WHERE ProjectID=' . $row['ID'] .
-						' ORDER BY Name ASC;');
-					
-					//print $memberSql;
-					
-					$members = array();
-					/*$members['projectManagers'] = array();
-					$members['developers'] = array();
-					$members['artists2D'] = array();
-					$members['artists3D'] = array();
-					$members['soundDesigners'] = array();
-					$members['gameDesigners'] = array();
-					$members['writers'] = array();*/
-					
-					$memberResult = mysql_query($memberSql);
-					print mysql_error();
-					
-					while ($memberRow = mysql_fetch_array($memberResult))
-					{
-						//print $memberRow['Name'];
-						$members[] = $memberRow['Name'];
-						/*if ($memberRow['ProjectManager'] == 1)
-						{
-							$members['projectManagers'][] = $memberRow['Name'];
-						}
-						
-						if ($memberRow['Developer'] == 1)
-						{
-							$members['Developers'][] = $memberRow['Name'];
-						}
-						
-						if ($memberRow['Artist2D'] == 1)
-						{
-							$members['Artist2Ds'][] = $memberRow['Name'];
-						}
-						
-						if ($memberRow['Artist3D'] == 1)
-						{
-							$members['Artist3Ds'][] = $memberRow['Name'];
-						}
-						
-						if ($memberRow['SoundDesigner'] == 1)
-						{
-							$members['SoundDesigners'][] = $memberRow['Name'];
-						}
-						
-						if ($memberRow['GameDesigner'] == 1)
-						{
-							$members['GameDesigners'][] = $memberRow['Name'];
-						}
-						
-						if ($memberRow['Writer'] == 1)
-						{
-							$members['Writers'][] = $memberRow['Name'];
-						}*/
-					}
+					$members = getProjectMembers($row['ID']);
 					
 					$projects[] = new Project(
 						$row['Title'],
