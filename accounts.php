@@ -158,7 +158,7 @@ function demoteMember($id)
 	return $errno;
 }
 
-function getAllMembers()
+function getAllMembers($execFirst = false)
 {
 	$con = dbConnect();
 	if (!$con)
@@ -166,7 +166,16 @@ function getAllMembers()
 		return null;
 	}
 	
-	$query = "SELECT ID, Name FROM Members ORDER BY Name ASC;";
+	$query = '';
+	if ($execFirst)
+	{
+		$query = "SELECT ID, Name, Executive FROM Members ORDER BY Executive DESC, Name ASC;";
+	}
+	else
+	{
+		$query = "SELECT ID, Name, Executive FROM Members ORDER BY Name ASC;";
+	}
+	
 	$result = mysql_query($query, $con);
 	
 	$members = array();
@@ -175,6 +184,7 @@ function getAllMembers()
 		$member = array();
 		$member['ID'] = $row['ID'];
 		$member['Name'] = $row['Name'];
+		$member['Executive'] = $row['Executive'];
 		
 		if ($member['ID'] != 0)
 		{

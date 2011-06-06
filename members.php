@@ -74,49 +74,55 @@ include 'nav.php';
 		</p>
 	</div>
 	
-	<table>
-		<tbody>
-			<?php
-				require_once 'accounts.php';
-				require_once 'mysql.php';
-				
-				$con = dbConnect();
-				if (!$con)
+	<?php
+		require_once 'accounts.php';
+		require_once 'mysql.php';
+		
+		$con = dbConnect();
+		if (!$con)
+		{
+			die('Could not connect to database server.');
+		}
+		
+		$members = getallMembers(true);
+		
+		$memberID = getCurrentMemberID();
+		$exec = memberIsExec($memberID);
+		
+		$lastMemberExec = true;
+		print '<h2>Club Executives</h2><table><tbody>';
+		foreach ($members as $member)
+		{
+			if ($lastMemberExec AND !$member['Executive'])
+			{
+				print '</tbody></table><h2>Club Members</h2><table><tbody>';
+				$lastMemberExec = false;
+			}
+			
+			print '<tr><td><a href="memberInfo.php?id=' . $member['ID'] . '">' . $member['Name'] . '</a></td>';
+			if ($exec)
+			{
+				if ($member['ID'] == $memberID)
 				{
-					die('Could not connect to database server.');
+					print '<td></td>';
 				}
-				
-				$members = getallMembers();
-				
-				$memberID = getCurrentMemberID();
-				$exec = memberIsExec($memberID);
-				
-				foreach ($members as $member)
+				else
 				{
-					print '<tr><td><a href="memberInfo.php?id=' . $member['ID'] . '">' . $member['Name'] . '</a></td>';
-					if ($exec)
+					if ($member['Executive'])
 					{
-						if ($member['ID'] == $memberID)
-						{
-							print '<td></td>';
-						}
-						else
-						{
-							if ($member['Executive'])
-							{
-								print '<td><button onclick="demoteMember(' . $member['ID'] . ')">Demote Member</button></td>';
-							}
-							else
-							{
-								print '<td><button onclick="promoteMember(' . $member['ID'] . ')">Promote Member</button></td>';
-							}
-						}
+						print '<td><button onclick="demoteMember(' . $member['ID'] . ')">Demote Member</button></td>';
 					}
-					print '</tr>';
+					else
+					{
+						print '<td><button onclick="promoteMember(' . $member['ID'] . ')">Promote Member</button></td>';
+					}
 				}
-			?>
-		</tbody>
-	</table>
+			}
+			print '</tr>';
+		}
+		
+		print '</tbody></table>';
+	?>
 	
 	<div class="clear"></div>
 </div> <!-- main -->
