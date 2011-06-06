@@ -135,21 +135,15 @@ include 'nav.php';
 		
 		function getProjects()
 		{
-			$host = 'engr-db.engr.oregonstate.edu:3307';
-			$db = 'osugds';
-			$user = 'osugds_ro';
-			$pass = 'ZqeLFzKM';
+			require_once 'mysql.php';
 			
-			$projects = array();
-			
-			$con = mysql_connect($host, $user, $pass);
+			$con = dbConnect();
 			if (!$con)
 			{
 				print 'Unable to connect to database: ' . mysql_error();
 			}
 			else
 			{
-				mysql_select_db($db, $con);
 				$sql = mysql_real_escape_string('SELECT ID, Title, ' .
 					'Description, ImageURL, RepoURL, ProjectURL FROM ' .
 					'Projects ORDER BY Title DESC;');
