@@ -38,7 +38,7 @@ include 'nav.php';
 		$query = "SELECT Title, Lang, URL, PresentedOn FROM Presentations ORDER BY Lang ASC, PresentedOn DESC;";
 		$result = mysql_query($query, $con);
 		
-		$lastLang == '';
+		$lastLang = '';
 		while ($row = mysql_fetch_array($result))
 		{
 			if ($row['Lang'] != $lastLang)
@@ -80,7 +80,7 @@ include 'nav.php';
 		$query = "SELECT Title, Lang, URL FROM Tutorials ORDER BY Lang ASC;";
 		$result = mysql_query($query, $con);
 		
-		$lastLang == '';
+		$lastLang = '';
 		while ($row = mysql_fetch_array($result))
 		{
 			if ($row['Lang'] != $lastLang)
