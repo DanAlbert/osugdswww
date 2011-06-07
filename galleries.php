@@ -174,7 +174,7 @@ include 'nav.php';
 			{
 				$sql = mysql_real_escape_string('SELECT ID, Title, ' .
 					'Description, ImageURL, RepoURL, ProjectURL FROM ' .
-					'Projects ORDER BY Title DESC;');
+					'Projects ORDER BY Title ASC;');
 				
 				$result = mysql_query($sql, $con);
 				

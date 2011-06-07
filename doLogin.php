@@ -7,7 +7,8 @@ session_start();
 if (isset($_POST['engr']))
 {
 	if ((($_POST['engr'] == 'albertd') AND ($_POST['password'] == 'foobar')) OR
-		(($_POST['engr'] == 'ta') && ($_POST['password'] == 'passwd')))
+		(($_POST['engr'] == 'ta') && ($_POST['password'] == 'passwd')) OR
+		(($_POST['engr'] == 'user') && ($_POST['password'] == 'passwd')))
 	{
 		$_SESSION['engr'] = $_POST['engr'];
 		
