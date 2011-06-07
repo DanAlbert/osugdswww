@@ -123,7 +123,8 @@ include 'nav.php';
 						$membersString .= ', ';
 					}
 					
-					$membersString .= $member['name'];
+					$membersString .= '<a href="memberInfo.php?id=' .
+						$member['id'] . '">' . $member['name'] . '</a>';
 					
 					$first = false;
 				}
