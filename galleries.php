@@ -39,6 +39,8 @@ include 'nav.php';
 			private $imageURL;
 			private $repoURL;
 			private $projectURL;
+			private $playCount;
+			private $playTime;
 			private $members;
 			
 			function __construct(
@@ -47,6 +49,8 @@ include 'nav.php';
 				$imageURL,
 				$repoURL,
 				$projectURL,
+				$playCount,
+				$playTime,
 				$members)
 			{
 				$this->title = $title;
@@ -54,6 +58,8 @@ include 'nav.php';
 				$this->imageURL = $imageURL;
 				$this->repoURL = $repoURL;
 				$this->projectURL = $projectURL;
+				$this->playCount = $playCount;
+				$this->playTime = $playTime;
 				$this->members = $members;
 			}
 			
@@ -82,6 +88,16 @@ include 'nav.php';
 				return $this->projectURL;
 			}
 			
+			public function getPlayCount()
+			{
+				return $this->playCount;
+			}
+			
+			public function getPlayTime()
+			{
+				return $this->playTime;
+			}
+			
 			public function getMembers()
 			{
 				return $this->members;
@@ -106,7 +122,7 @@ include 'nav.php';
 				
 				print '<div class="project-container"><img src="' .
 					$this->imageURL . '" /><h2><a href="'.
-					$this->projectURL . '">' . $this->title . '</a></h2>' .
+					$this->projectURL . '">' . $this->title . '</a> - ' . $this->playCount . ' Plays - ' . $this->playTime . '</h2>' .
 					'<h3>Project Members</h3><p>' . $membersString .
 					'</p><br /><h4>Description:</h4><p>' .
 					$this->description . '</p><div class="clear"></div>' .
@@ -157,12 +173,17 @@ include 'nav.php';
 				{
 					$members = getProjectMembers($row['ID']);
 					
+					$query = "SELECT PlayCount, PlayTime FROM ArcadeData WHERE ProjectID='" . $row['ID'] . "';";
+					$metrics = mysql_fetch_array(mysql_query($query, $con));
+					
 					$projects[] = new Project(
 						$row['Title'],
 						$row['Description'],
 						$row['ImageURL'],
 						$row['RepoURL'],
 						$row['ProjectURL'],
+						$metrics['PlayCount'],
+						$metrics['PlayTime'],
 						$members);
 				}
 				
