@@ -34,6 +34,7 @@ include 'nav.php';
 		
 		class Project
 		{
+			private $id;
 			private $title;
 			private $description;
 			private $imageURL;
@@ -44,6 +45,7 @@ include 'nav.php';
 			private $members;
 			
 			function __construct(
+				$id,
 				$title,
 				$description,
 				$imageURL,
@@ -53,6 +55,7 @@ include 'nav.php';
 				$playTime,
 				$members)
 			{
+				$this->id = $id;
 				$this->title = $title;
 				$this->description = $description;
 				$this->imageURL = $imageURL;
@@ -61,6 +64,11 @@ include 'nav.php';
 				$this->playCount = $playCount;
 				$this->playTime = $playTime;
 				$this->members = $members;
+			}
+			
+			public function getID()
+			{
+				return $this->id;
 			}
 			
 			public function getTitle()
@@ -120,7 +128,7 @@ include 'nav.php';
 					$first = false;
 				}
 				
-				print '<div class="project-container"><img src="' .
+				print '<div id="' . $this->id . '" class="project-container"><img src="' .
 					$this->imageURL . '" /><h2><a href="'.
 					$this->projectURL . '">' . $this->title . '</a> - ' . $this->playCount . ' Plays - ' . $this->playTime . '</h2>' .
 					'<h3>Project Members</h3><p>' . $membersString .
@@ -177,6 +185,7 @@ include 'nav.php';
 					$metrics = mysql_fetch_array(mysql_query($query, $con));
 					
 					$projects[] = new Project(
+						$row['ID'],
 						$row['Title'],
 						$row['Description'],
 						$row['ImageURL'],
