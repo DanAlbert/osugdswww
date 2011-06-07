@@ -11,7 +11,7 @@ requireLogin('/osugds/createProject.php');
 $con = dbConnect();
 if (!$con)
 {
-	die('Could not connect to database server.');
+	header('Location: createProject.php?error=5');
 }
 
 $title = mysql_real_escape_string($_POST['title']);
@@ -38,18 +38,29 @@ else
 	mysql_query($query, $con);
 	if (mysql_errno() != 0)
 	{
-		die(mysql_error());
 		mysql_close($con);
 		header('Location: createProject.php?error=2');
 	}
 	else
 	{
-		$memberID = getMemberID($_SESSION['engr']);
+		# getCurrentMemberID() and getProjectID() creates their own connections, which kills ours.
+		mysql_close($con);
+		
+		$memberID = getCurrentMemberID();		
 		$projectID = getProjectID($title);
+		
+		# Reopen our connection
+		$con = dbConnect();
+		if (!$con)
+		{
+			header('Location: createProject.php?error=5');
+		}
+		
 		$query = "INSERT INTO ProjectManagers (MemberID, ProjectID) VALUES ('" . $memberID . "', '" . $projectID . "');";
 		mysql_query($query, $con);
 		if (mysql_errno() != 0)
 		{
+			mysql_close($con);
 			header('Location: createProject.php?error=3');
 		}
 		else
@@ -58,10 +69,12 @@ else
 			mysql_query($query, $con);
 			if (mysql_errno() != 0)
 			{
+				mysql_close($con);
 				header('Location: createProject.php?error=4');
 			}
 			else
 			{
+				mysql_close($con);
 				header('Location: manageProject.php?id=' .  $projectID);
 			}
 		}

@@ -28,6 +28,34 @@ include 'nav.php';
 		</p>
 	</div>
 	
+	<?php
+		if (isset($_REQUEST['error']))
+		{
+			switch ($_REQUEST['error'])
+			{
+			case 1:
+				print '<span>A project with that title already exists.</span>';
+				break;
+				
+			case 2:
+				print '<span>Could not create new project.</span>';
+				break;
+				
+			case 3:
+				print '<span>Could not add project manager.</span>';
+				break;
+				
+			case 4:
+				print '<span>Could not add project member.</span>';
+				break;
+				
+			case 4:
+				print '<span>Could not connect to the database.</span>';
+				break;
+			}
+		}
+	?>
+	
 	<h1>Create a Project</h1>
 	<form action="doCreateProject.php" method="POST">
 		<label for="title">Title *</label>
