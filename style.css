@@ -110,6 +110,11 @@ form select+select
 	margin: 0px 0px 0px 8px;
 }
 
+button, form input[type="submit"]
+{
+	padding: 3px;
+}
+
 table
 {
 	margin-top: 6px;

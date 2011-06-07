@@ -156,6 +156,11 @@ include 'nav.php';
 		</tbody>
 	</table>
 	
+	<h2>Delete Project</h2>
+	<form action="doDeleteProject.php" method="POST">
+		<input type="hidden" name="id" value="<?php echo $_REQUEST['id']; ?>" />
+		<input type="submit" value="Delete - WARNING: THIS IS FINAL" />
+	</form>
 	<div class="clear"></div>
 </div> <!-- main -->
 

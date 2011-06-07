@@ -34,6 +34,11 @@ include 'nav.php';
 		require_once 'mysql.php';
 		require_once 'projects.php';
 		
+		if (isset($_REQUEST['status']) AND ($_REQUEST['status'] == 1))
+		{
+			print '<span>Project deleted successfully.</span>';
+		}
+		
 		$currentID = getCurrentMemberID();
 		
 		$con = dbConnect();
