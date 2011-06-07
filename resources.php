@@ -3,6 +3,30 @@
 	<title>OSU Game Design Studios</title>
 	<meta name="author" content="Dan Albert" />
 	<link rel="stylesheet" type="text/css" href="/osugds/style.css" />
+	
+	<script type="text/javascript">
+	
+	function editTutorial(id)
+	{
+		window.location = '/osugds/editTutorial.php?id=' + id;
+	}
+	
+	function deleteTutorial(id)
+	{
+		window.location = '/osugds/doDeleteTutorial.php?id=' + id;
+	}
+	
+	function editPresentation(id)
+	{
+		window.location = '/osugds/editPresentation.php?id=' + id;
+	}
+	
+	function deletePresentation(id)
+	{
+		window.location = '/osugds/doDeletePresentation.php?id=' + id;
+	}
+	
+	</script>
 </head>
 <body>
 <?php
@@ -25,9 +49,32 @@ include 'nav.php';
 		</p>
 	</div>
 	
+	<?php
+		if (isset($_REQUEST['status']))
+		{
+			switch ($_REQUEST['status'])
+			{
+			case 1:
+			case 3:
+				print '<span>Changes saved successfully.</span>';
+				break;
+				
+			case 2:
+				print '<span>Tutorial deleted successfully.</span>';
+				break;
+				
+			case 4:
+				print '<span>Presentation deleted successfully.</span>';
+				break;
+			}
+		}
+	?>
+	
 	<h2>Presentations</h2>
 	<?php
 		require_once 'mysql.php';
+		
+		$isExec = memberIsExec(getCurrentMemberID());
 		
 		$con = dbConnect();
 		if (!$con)
@@ -35,7 +82,7 @@ include 'nav.php';
 			die('Could not connect to database server.');
 		}
 		
-		$query = "SELECT Title, Lang, URL, PresentedOn FROM Presentations ORDER BY Lang ASC, PresentedOn DESC;";
+		$query = "SELECT ID, Title, Lang, URL, PresentedOn FROM Presentations ORDER BY Lang ASC, PresentedOn DESC;";
 		$result = mysql_query($query, $con);
 		
 		$lastLang = '';
@@ -58,18 +105,16 @@ include 'nav.php';
 			
 			$date = "$day $month $year";
 			
-			print '<li><a href="' . $row['URL'] . '">' . $date . ' - ' . $row['Title'] . '</a></li>';
+			print '<li><a href="' . $row['URL'] . '">' . $date . ' - ' . $row['Title'] . '</a>';
+			if ($isExec)
+			{
+				print '<button onclick="editPresentation(' . $row['ID'] . ');">Edit</button><button onclick="deletePresentation(' . $row['ID'] . ');">Delete</button>';
+			}
+			print '</li>';
 		}
-	?>
-	<!--<ul>
-		<!--<li><a href="https://docs.google.com/present/edit?id=0AaQCl-92YIEcZGd0YzJ4OG1fMjE0dzQ1NjVnag&hl=en">24 January 2011 - Graphics and Animation in Games</a></li>
-		<li><a href="/osugds/resources/Gaming%20Input%20and%20the%20Arcade.pptx">14 February 2011 - Gaming Input and the Arcade</a> - <a href="/osugds/resources/lesson03.zip">Source Code</a></li>
-		<li>28 February 2011 - OpenGL - <a href="/osugds/resources/OpenGLDemo.tar.bz2">Source Code</a> (Note: You will need to place a copy of glut.h in C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Include\gl)</li>
-	</ul>-->
-	
-	<h2>Tutorials</h2>
-	<?php
-		require_once 'mysql.php';
+		
+		// Tutorials
+		print '<h2>Tutorials</h2>';
 		
 		$con = dbConnect();
 		if (!$con)
@@ -77,7 +122,7 @@ include 'nav.php';
 			die('Could not connect to database server.');
 		}
 		
-		$query = "SELECT Title, Lang, URL FROM Tutorials ORDER BY Lang ASC;";
+		$query = "SELECT ID, Title, Lang, URL FROM Tutorials ORDER BY Lang ASC;";
 		$result = mysql_query($query, $con);
 		
 		$lastLang = '';
@@ -93,10 +138,21 @@ include 'nav.php';
 				$lastLang = $row['Lang'];
 			}
 			
-			print '<li><a href="' . $row['URL'] . '">' . $row['Title'] . '</a></li>';
+			print '<li><a href="' . $row['URL'] . '">' . $row['Title'] . '</a>';
+			if ($isExec)
+			{
+				print '<button onclick="editTutorial(' . $row['ID'] . ');">Edit</button><button onclick="deleteTutorial(' . $row['ID'] . ');">Delete</button>';
+			}
+			print '</li>';
 		}
 	?>
-	<!--<h3>Flash Tutorials</h3>
+	
+	<!--<ul>
+		<!--<li><a href="https://docs.google.com/present/edit?id=0AaQCl-92YIEcZGd0YzJ4OG1fMjE0dzQ1NjVnag&hl=en">24 January 2011 - Graphics and Animation in Games</a></li>
+		<li><a href="/osugds/resources/Gaming%20Input%20and%20the%20Arcade.pptx">14 February 2011 - Gaming Input and the Arcade</a> - <a href="/osugds/resources/lesson03.zip">Source Code</a></li>
+		<li>28 February 2011 - OpenGL - <a href="/osugds/resources/OpenGLDemo.tar.bz2">Source Code</a> (Note: You will need to place a copy of glut.h in C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Include\gl)</li>
+	</ul>
+	<h3>Flash Tutorials</h3>
 	<ul>
 		<li><a href="/osugds/tutorials/flash/tutorial1.php">Tutorial 1</a></li>
 		<li><a href="/osugds/tutorials/flash/tutorial2.php">Tutorial 2</a></li>
